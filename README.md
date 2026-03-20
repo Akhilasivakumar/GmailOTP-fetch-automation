@@ -1,143 +1,90 @@
-# 🚀 Practice Form Automation Framework
+# NRL Email OTP Automation
 
-This project is an End-to-End Test Automation Framework built using:
+A Playwright + Cucumber BDD automation project designed to test the NRL Signup flow with automated Gmail OTP verification using the Google Gmail API (OAuth2).
 
-- TypeScript
-- Cucumber (BDD)
-- Playwright
-- Page Object Model (POM)
+## � Key Features
 
-The framework automates a Practice Form application using a modular and scalable structure.
+- **Cucumber BDD**: Scenarios written in human-readable Gherkin syntax.
+- **Playwright**: Fast and reliable browser automation.
+- **Gmail API Integration**: Securely fetches 6-digit verification codes using OAuth2 (no IMAP required).
+- **Self-Healing Locators**: Robust multi-selector strategy to handle UI changes.
+- **CI/CD Ready**: Powered by GitHub Actions with **Playwright Browser Caching**, **Concurrency Control**, and **Manual Triggers**.
+- **Automated Reporting**: Generates HTML and JSON reports on every test run.
 
----
-
-# 📌 Project Overview
-
-This automation framework is designed to:
-
-- Execute BDD test scenarios using Cucumber
-- Use TypeScript for better maintainability and type safety
-- Implement Page Object Model architecture
-- Separate locators, page logic, utilities, and configuration
-- Generate structured test execution reports
-
----
-
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```
-project-root/
-│
+├── .github/workflows/   # CI/CD configuration (ci.yml)
 ├── src/
-│   ├── config/
-│   │   └── env.ts                # Environment configuration
-│   │
-│   ├── features/
-│   │   └── form.feature          # Cucumber feature file
-│   │
-│   ├── locators/
-│   │   └── FormLocators.ts       # Element locators
-│   │
-│   ├── pages/
-│   │   └── FormPage.ts           # Page Object class
-│   │
-│   ├── step-definitions/
-│   │   └── form.steps.ts         # Step definitions
-│   │
-│   ├── support/
-│   │   ├── hooks.ts              # Before/After hooks
-│   │   └── world.ts              # Custom Cucumber world setup
-│   │
-│   ├── test-data/
-│   │   └── sample.png            # Test file for upload validation
-│   │
-│   └── utils/
-│       └── fileUpload.ts         # Utility functions
-│
-├── test-output/
-│   ├── results/                  # Execution results
-│   └── reports/
-│       ├── cucumber-report.html
-│       └── cucumber-report.json
-│
-├── cucumber.js                   # Cucumber configuration
-├── tsconfig.json                 # TypeScript configuration
-├── package.json
-└── README.md
+│   ├── features/       # BDD scenarios (.feature)
+│   ├── pages/          # Page Object Model (POM)
+│   ├── step-definitions/ # Step implementation code
+│   ├── support/        # Gmail API helper, Hooks, World setup
+│   └── config/         # Environment configuration
+├── .env                # Private credentials (NOT tracked by git)
+├── cucumber.js         # Cucumber configuration
+└── tsconfig.json       # TypeScript configuration
 ```
 
----
+## 🛠️ Setup Instructions
 
-# ✅ Features Implemented
+### 1. Prerequisites
+- **Node.js**: v18 or newer.
+- **Google Cloud Project**: With the **Gmail API** enabled and OAuth2 credentials configured.
 
-- Structured `src` folder architecture
-- BDD implementation using Cucumber
-- TypeScript-based step definitions
-- Page Object Model design pattern
-- Separate locator management
-- Environment configuration file
-- Custom hooks and world configuration
-- Utility functions for reusable logic
-- File upload testing support
-- JSON and HTML report generation
-- Local test execution support
+### 2. Local Environment Setup
+Create a `.env` file in the root directory:
 
----
+```env
+BASE_URL=http://d3nxpusm55ya6n.cloudfront.net
+USER_EMAIL=your-email@gmail.com
+BROWSER=chromium
+HEADLESS=false
+TIMEOUT=120000
 
-# ⚙️ Prerequisites
+# Gmail OAuth2 Credentials
+GMAIL_CLIENT_ID=your-client-id
+GMAIL_CLIENT_SECRET=your-client-secret
+GMAIL_REFRESH_TOKEN=your-refresh-token
+```
 
-- Node.js (v18 recommended)
-- npm
-
----
-
-# 🔧 Installation
-
-Install dependencies:
-
+### 3. Install and Initialize
 ```bash
+# Install NPM packages
 npm install
+
+# Install Playwright browsers and system dependencies
+npx playwright install --with-deps
 ```
 
-Install Playwright browsers:
+## 🧪 Running Tests
 
+### Local Execution
 ```bash
-npx playwright install
-```
-
----
-
-# ▶️ Running Tests
-
-Execute all test scenarios:
-
-```bash
+# Run all tests
 npm test
+
+# Open the HTML report after tests
+npm run report
 ```
 
----
+Reports are saved to `test-output/reports/`.
 
-# 📊 Test Reports
+## ⚙️ CI/CD (GitHub Actions)
 
-After execution, reports are generated inside:
+The project is fully configured for continuous integration. The workflow is located in `.github/workflows/ci.yml`.
 
-```
-test-output/reports/
-```
+### Features:
+- **Playwright Caching**: Speeds up runs by ~2-3 minutes by caching browser binaries.
+- **Concurrency**: Cancels outdated runs on the same branch to save resources.
+- **Manual Trigger**: Go to **Actions > NRL Email OTP Automation > Run workflow** to trigger tests manually.
 
-- `cucumber-report.html`
-- `cucumber-report.json`
-
-Open the HTML report in a browser to view detailed execution results.
-
----
-
-# 🛠 Technology Stack
-
-- Node.js
-- TypeScript
-- Cucumber
-- Playwright
-
----
-
+### Setup GitHub Secrets:
+To enable CI, add the following as **GitHub Secrets** (`Settings > Secrets > Actions`):
+- `BASE_URL`
+- `USER_EMAIL`
+- `GMAIL_CLIENT_ID`
+- `GMAIL_CLIENT_SECRET`
+- `GMAIL_REFRESH_TOKEN`
+- `BROWSER` (optional, defaults to chromium)
+- `TIMEOUT` (optional, defaults to 60000)
